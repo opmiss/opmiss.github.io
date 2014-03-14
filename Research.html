@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Welcome to Wei Zhuo's Homepage</title>
+<link rel="stylesheet" href="style-Tina.css" type="text/css" media="screen" />
+
+</head> 
+
+<body> 
+<div id="mainContainer">
+	
+<div id="header"> <div class="box"> 
+<script src="./script/header.js">
+</script>
+</div></div>
+	
+	<div id="navigation"> 
+	    <div class="navi"><a href="Home.html">Home</a></div>
+		<div class="navi"><a href="Research.html">Research</a></div>
+		<div class="navi"><a href="Thesis.html">Thesis</a></div>
+		<div class="navi"><a href="Publication.html">Publication</a></div>
+		<!---<div class="navi"><a href="Software.html">Software</a></div>--->
+	</div>
+	
+	<div id="topShadow">	</div>
+	
+	<div id="content">
+	
+		<div class="box">
+         <h1>Shape Transformation <a href="./bib/Zhuo_1.bib"><sub>BibTex</sub></a> </h1>
+		 <br>
+		 <h2> Fleshing: Spine Bending with Local Volume Preservation </h2>
+		<img align="center" hspace="10" vspace="10" border="0" width="600" src="pics/bunny.png" /></a>
+		<p> 
+		Deformation with local volume preservation is characterized by a transformation with constant 
+		unit Jacobian determinant everywhere. We exploit this constraint and derive three <em>closed-form</em> solutions, 
+		<em>Radial, Normal and Binormal</em>, that give stylized locally volume-preserving deformation driven by a 3D curve.
+		We present Fleshing as the general deformation framework that implements these solutions and use 
+		<em>normal-propagated</em> frame with the <em>unbending-transfer-bending</em> technique to solve the 
+		twist problems in skinning with the Frenet frame. In addition to meshes, Fleshing can operate on any shape 
+		topology (point cloud, offset surfaces or cell complexes).   
+		</p>
+		 <h2> EVA: Curvature-based Offsets with Even Volume/Area</h2>
+		 	<div id="thumbnail">
+			<img align="center" hspace="10" vspace="10" border="0" width="500" src="pics/offset.png" />
+			</div>
+		<p> Common shape modeling operations such as subdivision, smoothing, bending can incur significant 
+		volume loss or uneven volume distribution. Existing volume compensation techniques based on relaxation
+		often introduce nonlinear computational overhead and may cause uncertainty in determining the 
+		compensated shape. To address this issue, we develop EVA, a shape modeling application that solves the
+		<em>local and global</em> versions of the <em>Minkowski-Steiner formular</em>, 
+		<b>2&pi;&frasl;3gh<sup>3</sup>+ mh<sup>2</sup>+h= &Delta;V&frasl;A</b>, for precise 
+		area and volume control and machining with constant material removal rate.  
+		</p>
+        </div>
+		
+		<div class="box">
+         <h1>Multivariate Data Visualization <a href="./bib/Zhuo_2.bib"><sub>BibTex</sub></a> </h1>
+		 <br>
+		 <h2>Visual Analytic Tools in Parallel Coordinates </h2>
+		 <img align="center" hspace="10" vspace="10" border="0" width="600" src="pics/clutter.png"/>
+		<p> We address the occlusion problem in Parallel Coordinates using color diffusion and propose visual 
+		analytic tools that lay out and draw clusters/glyphs based on their correlations with each other and 
+		with the data dimension, providing both Dimension Reduction and Details-on-Demand through views 
+		and interaction.  
+		</p>
+        </div>
+		
+		<div class="box">
+		<h1> Large-scale Spatial Analysis <a href="./bib/Zhuo_3.bib"><sub>BibTex</sub></a> </h1>
+		<br>
+         <h2>Distributed Spatial Analysis in R</h2>
+		 <img src="pics/krig.png" width="550" > 
+		 <p>We investigate the problem of ﬁtting statistical models to large spatial datasets. 
+		 The process of ﬁtting a model involves efﬁcient computation of likelihoods. 
+		 A <em>variance-minimized</em> solution of the problem requires linear solve and 
+		 <em>cholesky decomposition</em>, 
+		 for which the parallel implementation has nontrivial dependencies. We examine two modes of 
+		 parallelization: multi-threaded (within single node) and distributed (across multiple nodes).
+		 On a single node, we used the multi-threaded BLAS implementation to achieve signiﬁcant performance 
+		 gain over the single threaded implementation. For a cluster of compute nodes, we implemented a 
+		 distributed likelihood algorithm using RMPI. The resulting experients on <a href="http://www.nersc.gov/users/computational-systems/carver/">
+		 Carver</a> utilize all available cores on a single node, as well as multiple nodes on the cluster. </p>
+        </div>
+	   
+	</div>
+
+	<div id="sidebar">
+		<div class="box">
+			<img src="pics/me1.jpg" alt="picture of me" width="180">
+		</div>
+		<div class="box">
+			<p>Links</p>
+			<ul>
+				<script src="./script/link.js"></script>
+			</ul>
+		</div>
+	</div>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=8479376; 
+var sc_invisible=1; 
+var sc_security="4c2aa202"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost +
+"statcounter.com/counter/counter.js'></"+"script>");</script>
+</body>
+</html>
