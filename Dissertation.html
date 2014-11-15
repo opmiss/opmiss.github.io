@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title> Spine-driven Deformation with Local Volume Preservation </title>
+	 <link rel="stylesheet" href="./files/style.css">
+</head>
+
+<body>
+
+    <div id="content" class="clearfix">
+    	    <div id="intro" class="interior">
+        <a>
+            <img id="logo" src="./files/sbunny.jpg" align="middle" height="150">
+        </a>
+    </div>
+      <!--  <div id="column2" class="interior">
+           <ul>
+                <li>A Defense Dissertation Presented to The Academic Faculty by <a href="http://www.cc.gatech.edu/~wzhuo3/"> Wei (Tina) Zhuo </a> </li>
+                <li> In Partial Fulfillment of PHD Degree in Computer Science in the <a href="http://www.ic.gatech.edu/"> School of Interactive Computing</a> </li>
+                <li> July 2013</li>
+            </ul>
+  
+        </div>-->
+
+        <div class="interior">
+          <header>
+            <h1> Spine-driven Deformation with Local Volume Preservation</h1>
+            
+            <div id="gtoc">
+              <p>
+                <a href="#announcement" >Announcement</a> |
+                <a href="#proposal">Dissertation Materials</a> |   
+                <a href="#publication">Publication</a>
+             
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>Date and Time</h2>
+            <p>July 30 (Wednesday), 2014. 9:55am-11:55am EST</p>
+            <h2>Committee </h2>
+			<p> 
+			Professor <a href="http://ljk.imag.fr/membres/Stefanie.Hahmann/">Stefanie Hahmann</a>, Applied Mathematics, Grenoble Institute of Technology, INRIA <br>			
+			Professor <a href="http://www.cc.gatech.edu/~karenliu"> Karen Liu</a>, Interactive Computing, Georgia Institute of Technology <br>
+			Professor <a href="http://www.cc.gatech.edu/~jarek">Jarek Rossignac</a> (Advisor), Interactive Computing, Georgia Institute of Technology <br>
+			Professor <a href="http://www.cc.gatech.edu/~turk/"> Greg Turk</a>, Interactive Computing, Georgia Institute of Technology <br> 
+			Professor <a>George Turkiyyah</a>, Computer Science, American University of Beirut, KAUST<br></p>
+			
+            <h2 id="announcement"> Abstract</h2>
+            
+            <p> In shape modeling applications, deformation is the process of applying a continuous, non-affine transformation to a shape. The definition of the deformation should be independent of the representation of the shape. In practice, the shape is often represented by its boundary, which is defined by a set of vertices and by connectivity information. The transformation is often applied to these points. </p>
+
+<p> A deformation algorithm takes the original shape and designer's choices as inputs, and outputs the deformed shape. This dissertation dedicates to introducing spine-based deformation: Any distortion to the shape is controlled by a low dimensional proxy, which is a spine curve or surface. Considering a sometimes important constraint to preserve the shape's volume during deformation, this thesis addresses a suite of problems in spine-based deformation with local volume preservation, meaning that the volume of any subset of the shape is preserved. Although our deformation model may be applied to the control points or vertices of a surface model that is not a water tight boundary of a solid, in this thesis, the term shape will refer to a solid model which has a clearly defined interior and volume. Previously proposed local or global volume compensation techniques are typically based on iterations that introduce a complexity bilinear in the numbers of vertices and iterations. we present a family of closed-form solutions for shape deformation with mathematically exact local volume preservation, and demonstrate their power in the context of interactive bending, rotating, sliding or stretching a 2D or 3D shape. The overall complexity is linear in the number of vertices. </p>
+
+<p> Proposed spine-based deformation framework adopts the following assumptions in geometric modeling:<br>
+- When the spine is a curve, a plane normal to the spine curve remains normal to the spine curve after deformation. The parameter associated with the point at which the plane intersects the curve is unchanged. </br> 
+- When the spine is a surface, a line normal to the spine surface remains normal to the spine surface after deformation. The parameters associated with the point at which the line intersecting the plane remain unchanged. </br>  
+
+With these assumptions, we compute the closed-form formulation for the deformation that guarantees local volume preservation and is expressed using real roots of low degree polynomials and simple point and vector expressions.
+Due to its simplicity, our solution may be used to deform complex models in realtime during interactive manipulation or animation, where the behavior of the spine has been designed or is computed in realtime through simulation. </p>
+            
+            <h2 id="proposal"> Dissertation Materials</h2>
+            <p> Thesis: <a href="./files/thesis-lowres.pdf">low resolution</a>, <a href="./files/thesis-highres.pdf">high resolution</a>
+            <p> Presentation: <a href="./files/slides.pdf">slides</a>, <a>video</a> </p>
+            <p> Source code: <a>git@github.com:opmiss/Bending.git</a> </p>
+            
+            last updated: July 7, 2014 </p>
+            
+            <h2 id="publication"> Related Publication </h2>
+            
+            <p> Wei Zhuo and Jarek Rossignac, <a href="http://www.cc.gatech.edu/~wzhuo3/pdf/spine_volume_preserving_2013.pdf" >"Fleshing: Spine-driven Bending with Local Volume Preservation"</a>, Computer Graphics Forum (CGF), VOL. 32, NO. 2, 2013 (Presented at EG 2013) <br>
+
+				Wei Zhuo and Jarek Rossignac, <a href="http://www.cc.gatech.edu/~wzhuo3/pdf/curvature_offset_smi_2012.pdf" >"Curvature-based Offset Distance: Implementation and Applications"</a>, Computer & Graphics (C&G), VOL. 36, NO. 5: 445–454, 2012 (Presented at SMI 2012)
+            </p>
+            
+            
+          </div>
+
+          <div id="apicontent">
+            <ul>
+</body></html>
