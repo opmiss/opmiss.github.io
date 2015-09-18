@@ -1,0 +1,14 @@
+var nd = 0; var nt = 4; var dr = 5; var tr = 30; var dr22=100; var dr2=10; 
+var D = new Array(); 
+var T = new Array(); 
+var svgns = "http://www.w3.org/2000/svg";
+var t_stl="fill:blue;stroke:aqua;stroke-width:2;fill-opacity:0.8; stroke-opacity:0.6"; 
+var d_stl="fill:red;stroke:yellow;stroke-width:2;fill-opacity:0.9; stroke-opacity:0.6"; 
+var svgDocument= null; 
+var SVGDocument = null;
+var SVGRoot = null;
+var TrueCoords = null;
+var GrabPoint = null;
+var Fix = null;
+var DragTarget = null;
+var po = true; 

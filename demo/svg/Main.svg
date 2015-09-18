@@ -1,0 +1,26 @@
+<svg 
+xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink"
+transform="translate(0, 0) scale(1)"
+onload='Init(evt)'
+onmousedown='Grab(evt)'
+onmousemove='Drag(evt)'
+onmouseup='Drop(evt)'>
+<script type="text/ecmascript" xlink:href="Header.js" />
+<script type="text/ecmascript" xlink:href="Interaction.js" />
+<script type="text/ecmascript" xlink:href="Object.js" />
+
+<g id='topics'>
+</g>
+<g id='docs'>
+</g>
+<g id='fix'>
+ <rect x='100' y='550' height='15' width='50' rx='5' ry='5' 
+ style='stroke:orange;fill:gray;' onclick='resetTopics()' />
+ <text x='155' y='560' style='fill:orange;'> reset  </text>
+ 
+<rect x="200" y="550" height='15' width='50' rx='5' ry='5' 
+  style='fill:pink;stroke:orange;' onclick='toggle()' />
+<text x='260' y='560' style='fill:orange;'> toggle packing  </text>
+</g>
+</svg>
