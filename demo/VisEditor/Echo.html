@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cognitive Dialog</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/extra.css">
+</head>
+<body>
+
+<div class="container">
+
+  <div class="page-header">
+    <h1>Cognitive Dialog</h1>
+  </div>
+
+   <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+
+
+          <button id="btn_user" type="button" class="btn btn-default">
+		  <span id="user" class="glyphicon glyphicon-user js-tooltip" data-original-title="Log in"></span>
+		  </button>
+
+		 <button id="btn_cog" type="button" class="btn btn-default" style="float:right;">
+		 <span class="glyphicon glyphicon-cog js-tooltip" data-original-title="Options"></span>
+		 </button>
+
+        </div> <!--modal-header -->
+
+        <div data-spy="scroll" id="dlg_body" class="modal-body">
+
+		  <div id="msg0" align=left>
+		    <span id="meep00-large" class="js-popover"
+		    data-content="Hello, how can I help you?"
+		    data-container="body"
+		    data-placement="right"
+		    ></span>
+		  </div> <!--msg1-->
+
+		<!-- <div id="msg2" align=right>
+		    <span id="meep11-large" class="btn js-popover"
+		    data-content="Hello, how can I help you?"
+		    data-container="body"
+		    data-placement="left"
+		    ></span>
+		  </div> <!--msg2-->
+
+		</div><!-- modal-body -->
+
+
+        <div class="modal-footer">
+
+           <div class="input-group">
+             <form id="charInputForm">
+               <input type="text" id="chatInput" class="form-control" placeholder="Enter chat"/>
+             </form>
+             <span class="input-group-btn">
+               <button id="btn_emoticon" class="btn btn-default" type="button"> <span class="glyphicon iconsmile"></span></button>
+               <button id="btn_send" class="btn btn-default" type="button" onclick="enterChat()">send</button>
+             </span>
+           </div><!-- input-group -->
+
+        </div> <!-- modal-footer -->
+
+      </div> <!-- modal-content -->
+
+   </div> <!-- modal-dialog -->
+
+
+</div> <!-- container -->
+
+<!-- JavaScript Includes -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!--<script src="js/transition.js"></script>
+<script src="js/modal.js"></script>
+<script src="js/tooltip.js"></script>
+<script src="js/popover.js"></script>-->
+
+
+
+<!-- JavaScript Test -->
+<script>
+sendid=1;
+recvid=1;
+function sendChat(chat, replyid){
+	var msg=document.createElement("div")
+  	msg.setAttribute("id", "msg3")
+  	msg.setAttribute("align", "right")
+  	var msgc=document.createElement("span")
+  	msgc.setAttribute("id", "meep10-large")
+  	msgc.setAttribute("class", "js-popover")
+  	msgc.setAttribute("data-content", chat)
+  	msgc.setAttribute("data-container", "body")
+  	msgc.setAttribute("data-placement", "left")
+  	msg.appendChild(msgc)
+  	return msg;
+}
+
+function recvChat(chat, recvid){
+	var msg=document.createElement("div")
+  	msg.setAttribute("id", "msg3")
+  	msg.setAttribute("align", "left")
+  	var msgc=document.createElement("span")
+  	msgc.setAttribute("id", "meep00-large")
+  	msgc.setAttribute("class", "js-popover")
+  	msgc.setAttribute("data-content", chat)
+  	msgc.setAttribute("data-container", "body")
+  	msgc.setAttribute("data-placement", "right")
+  	msg.appendChild(msgc)
+  	return msg;
+}
+
+function enterChat(){
+	var chat = document.getElementById("chatInput").value
+  	 if (chat){
+  	 	$("#dlg_body").append(sendChat(chat, sendid++));
+  	 	$("#dlg_body").append(recvChat(chat, recvid++));
+  	 	$(".js-popover").popover('show')
+  	 }
+  	 document.getElementById("chatInput").value="";
+}
+window.onresize = function(){
+	$(".js-popover").popover('show')
+}
+window.onload = function(){
+	//alert("onload")
+	$(".js-popover").popover('show')
+	$(".js-tooltip").tooltip()
+}
+document.onkeypress = function(e){
+	if (e.keyCode==13) {
+		enterChat()
+		e.preventDefault()
+	}
+}
+
+//$(function () {
+//  $("#btn_send").click(function(){
+//  	enterChat();
+//  })
+//  $(".js-popover").popover('show')
+//  $(".js-tooltip").tooltip()
+//})
+
+</script>
+
+</body>
+</html>

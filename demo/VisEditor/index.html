@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vis Editor v1.0</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<!--<link rel="stylesheet" href="/trystyle.css">-->
+</head>
+<body id="doc_body">
+	<div class="form-group col-lg-8">
+	<canvas id="myCanvas"></canvas>
+</div>
+
+	<div class="form-group col-lg-4">
+		<button id="btn_enter" class="btn btn-default" type="button" onclick="enter()">CSG</button>
+		<button id="btn_load" class="btn btn-default" type="button" onclick="load()">Tree</button>
+		<button id="btn_load" class="btn btn-default" type="button" onclick="load()">Mesh</button>
+		<textarea id="data_input" class="form-control" rows="15" cols="20">
+[
+{"msg":"begin painting"},
+{"circle":{"x":500, "y":160, "r":10}},
+{"rect":{"x":200, "y":200, "w":25, "h":25}, "circle":{"x":600, "y":"200", "r":20}},
+{"msg":"finished painting!"}
+]
+		</textarea>
+<!--<textarea autocomplete="on" class="code_input" id="textareaCode" wrap="logical" spellcheck="true">
+</textarea>-->
+	</div>
+	<div class="form-group col-lg-4">
+		<label>Console</label>
+		<textarea id="console" class="form-control" rows="15" cols="20"></textarea>
+<!--<textarea autocomplete="on" class="code_input" id="textareaCode" wrap="logical" spellcheck="true">
+</textarea>-->
+	</div>
+
+<script src="model.js"></script>
+<script>
+	var canvas;
+	var width, height;
+	var ctx;
+	var draw;
+	var objs =[];
+
+	function init(){
+		canvas = document.getElementById('myCanvas');
+		if (canvas.getContext){
+			ctx = canvas.getContext("2d");
+			window.addEventListener('resize', resizeCanvas, false);
+			window.addEventListener('orientationchange', resizeCanvas, false);
+			resizeCanvas();
+		}
+	}
+	function draw(){
+  	ctx.fillStyle="#10F020";
+		ctx.strokeStyle="#A0A0A0";
+		ctx.strokeRect(2, 5, width-10, height-15);
+		ctx.strokeStyle="red";
+		for (var i=0; i<objs.length; i++){
+			objs[i].show(ctx);
+		}
+	}
+	function resizeCanvas(){
+		width = canvas.width = window.innerWidth*2/3;
+		height = canvas.height = window.innerHeight;
+		//console.log(width, height);
+  	draw();
+	}
+
+
+	init();
+	</script>
+
+  <script>
+	function enter(){
+		var input = document.getElementById("data_input").value
+		var data = JSON.parse(input);
+		if (data) {
+			document.getElementById('console').value="";
+			objs=[];
+			for (var i=0; i<data.length; i++){
+				if (data[i].circle) {
+					objs.push(new Circle(data[i].circle));
+				}
+				if (data[i].rect){
+					objs.push(new Rect(data[i].rect));
+				}
+				if (data[i].msg){
+					console.log("append", data[i].msg);
+					document.getElementById('console').value+=data[i].msg+'\n';
+				}
+			}
+			resizeCanvas();
+	}
+}
+</script>
+
+</body>
+</html>

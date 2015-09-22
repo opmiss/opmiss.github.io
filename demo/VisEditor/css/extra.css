@@ -1,0 +1,71 @@
+.alignleft {
+	float: left;
+}
+
+.alignright {
+	float: right;
+}
+
+.iconsmile:before {
+	content: url(../img/iconsmile.png); 
+}
+
+
+#meep00-large { 
+	position: relative; 
+	height: 70px; 
+	width: 70px; 
+	display: block; 
+	background: url('../img/meep-large.png') 0 0; 
+}
+
+#meep10-large { 
+	position: relative; 
+	height: 70px; 
+	width: 70px; 
+	display: block; 
+	background: url('../img/meep-large.png') -70px 0; 
+}
+
+#meep20-large { 
+	position: relative; 
+	height: 70px; 
+	width: 70px; 
+	display: block; 
+	background: url('../img/meep-large.png') -140px 0; 
+}
+
+#meep30-large { 
+	position: relative; 
+	height: 70px; 
+	width: 70px; 
+	display: block; 
+	background: url('../img/meep-large.png') -210px 0; 
+}
+
+#meep01-large { 
+	position: relative; 
+	height: 70px; 
+	width: 70px; 
+	display: block; 
+	background: url('../img/meep-large.png') 0 -70px; 
+}
+
+#meep02-large { 
+	position: relative; 
+	height: 70px; 
+	width: 70px; 
+	display: block; 
+	background: url('../img/meep-large.png') 0 -140px; 
+}
+
+
+
+#meep03-small { 
+	position: relative; 
+	height: 50px; 
+	width: 50px; 
+	display: block; 
+	background: url('../img/meep-small.png') 0 -210px; 
+}
+
