@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Map v1.0</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<!--<link rel="stylesheet" href="/trystyle.css">-->
+</head>
+<body id="doc_body">
+	
+	<svg id="myCanvas"></svg>
+<script src="geo.js"></script>
+<script src="data.js"></script>
+<script>
+    var svgCanvas;
+    var width, height;
+    function resizeCanvas(){
+       // console.log("resize canvas");
+       width = window.innerWidth;
+       height = window.innerHeight;
+       svgCanvas.setAttribute("width", width);
+       svgCanvas.setAttribute("height", height);
+       draw();
+    }
+	function init(){
+		svgCanvas = document.getElementById('myCanvas');
+        svgCanvas.onclick = mouseClick;
+        window.orientationchange = resizeCanvas;
+        window.onresize = resizeCanvas;
+        resizeCanvas();
+        //canvas.setAttribute
+		/*if (canvas.getContext){
+            initEntities();
+			ctx = canvas.getContext('2d');
+			gctx = canvas.getContext('2d');
+			window.addEventListener('resize', resizeCanvas, false);
+			window.addEventListener('orientationchange', resizeCanvas, false);
+			canvas.onselectstart = function(){return false;}
+			canvas.onmousedown=mouseDown;
+			canvas.onmousemove=mouseMove;
+			canvas.onmouseup=mouseUp;
+			//canvas.onselectstart = function(){return false;}
+			resizeCanvas();
+		}*/
+	}
+    var mouseClick = function(){
+        console.log("mouseClick");
+    }
+    var rect_style="fill:blue;stroke:aqua;stroke-width:2;fill-opacity:0.8; stroke-opacity:0.6";
+    var circle_style="fill:yellow; stroke:green;stroke-width:4";
+    var svgns="http://www.w3.org/2000/svg";
+    var draw = function(){
+        //console.log("draw canvas")
+        /*var node=document.createElementNS(svgns,"rect");
+        node.setAttributeNS(null,"x",50);
+        node.setAttributeNS(null,"y",50);
+        node.setAttributeNS(null,"width",50);
+        node.setAttributeNS(null,"height",50);
+        node.setAttributeNS(null,"style",circle_style);*/
+        var node = document.createElementNS(svgns, "circle");
+        node.setAttributeNS(null, "cx", 50);
+        node.setAttributeNS(null, "cy", 50);
+        node.setAttributeNS(null, "r", 40);
+        node.setAttributeNS(null, "style", circle_style);
+       /* node.cx = "50";
+        node.cy = "50";
+        node.r = "40";
+        node.stroke-width="4";
+        node.fill="yellow";*/
+        svgCanvas.appendChild(node);
+    }
+    var 
+	init();
+</script>
+
+</body>
+</html>
