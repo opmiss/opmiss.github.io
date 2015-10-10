@@ -96,6 +96,7 @@
     offsetY += styleBorderTop;*/
     mx = e.pageX - offsetX;
     my = e.pageY - offsetY;
+		console.log(mx, my); 
 	}
 
 	function draw(){
@@ -105,18 +106,13 @@
 		ctx.strokeRect(2, 5, width-10, height-15);
 		ctx.strokeStyle="red";
 		ctx.lineWidth=2;
-		for (var i=0; i<objs.length; i++){
-			objs[i].show(ctx);
-		}
+        objs.forEach(function(e){e.show(ctx)});
 	}
 	function resizeCanvas(){
 		width = canvas.width = window.innerWidth*2/3;
 		height = canvas.height = window.innerHeight;
-		//console.log(width, height);
-  	draw();
+        draw();
 	}
-
-
 	init();
 	</script>
 

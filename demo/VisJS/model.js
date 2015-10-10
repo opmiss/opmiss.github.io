@@ -40,6 +40,7 @@ var Circle = function(obj){
     }
   }
 }
-var MMap=new Object();
+
+/*var MMap=new Object();
 MMap["circle"]=Circle;
-MMap["rect"]=Rect;
+MMap["rect"]=Rect;*/

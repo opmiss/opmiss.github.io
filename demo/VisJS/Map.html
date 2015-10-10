@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vis Editor v1.0</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<!--<link rel="stylesheet" href="/trystyle.css">-->
+</head>
+<body id="doc_body">
+	<div class="form-group col-lg-8">
+	<canvas id="myCanvas"></canvas>
+</div>
+<script src="geo.js"></script>
+<script src="data.js"></script>
+<script>
+	var canvas, gcanvas;
+	var width, height;
+	var ctx, gctx;
+	var isDrag = false, isZoomIn = false, isZoomOut = false;
+	var px, py, mx, my;
+
+	function init(){
+		canvas = document.getElementById('myCanvas');
+		if (canvas.getContext){
+            initEntities();
+			ctx = canvas.getContext('2d');
+			gctx = canvas.getContext('2d');
+			window.addEventListener('resize', resizeCanvas, false);
+			window.addEventListener('orientationchange', resizeCanvas, false);
+			canvas.onselectstart = function(){return false;}
+			canvas.onmousedown=mouseDown;
+			canvas.onmousemove=mouseMove;
+			canvas.onmouseup=mouseUp;
+			//canvas.onselectstart = function(){return false;}
+			resizeCanvas();
+		}
+	}
+	function mouseDown(e){
+		if (isZoomIn) {
+            zoomInView();
+            draw();
+		} else if (isZoomOut){
+			zoomOutView();
+            draw(); 
+		} else { isDrag=true;}
+	}
+	function mouseUp(e){
+		isDrag=false;
+	}
+	function mouseMove(e){
+        px = mx; py = my;
+		getMouse(e);
+        if (isDrag){
+            translateView(px, py, mx, my);
+            draw();
+        }else {
+            drawZoomTool();
+        }
+	}
+	function getMouse(e){
+		var element = canvas, offsetX = 0, offsetY = 0;
+		if (element.offsetParent) {
+			do {
+				offsetX += element.offsetLeft;
+        offsetY += element.offsetTop;
+			} while ((element = element.offsetParent));
+		}
+        mx = e.pageX - offsetX;
+        my = e.pageY - offsetY;
+	}
+	function draw(){
+        ctx.clearRect(0, 0, width, height);
+        drawZoomTool()
+		ctx.strokeStyle="red";
+		ctx.lineWidth=2;
+        showEntities(view, ctx, width, height);
+	}
+    function drawMouse(){
+        gctx.strokeStyle="red";
+        gctx.beginPath();
+        gctx.arc(mx, my, 1, 0, 2*Math.PI);
+        gctx.stroke();
+    }
+    function drawZoomTool(){
+        ctx.lineWidth=1;
+        ctx.strokeStyle="#A0A0A0";
+        ctx.strokeRect(width-90, height-90, 30, 60);
+        ctx.beginPath();
+        if (mx>width-90 && mx<width-60 && my>height-90 && my<height-60){
+            ctx.strokeStyle="#0A0A0A"; isZoomIn = true;
+        }
+        else {
+            ctx.strokeStyle="#A0A0A0"; isZoomIn = false;
+        }
+        ctx.moveTo(width-75, height-85);
+        ctx.lineTo(width-75, height-65);
+        ctx.moveTo(width-85, height-75);
+        ctx.lineTo(width-65, height-75);
+        ctx.stroke();
+        ctx.beginPath();
+        if (mx>width-90 && mx<width-60 && my>height-60 && my<height-30){
+            ctx.strokeStyle="#0A0A0A"; isZoomOut=true;
+        }
+        else {
+            ctx.strokeStyle="#A0A0A0"; isZoomOut=false;
+        }
+        ctx.moveTo(width-85, height-45);
+        ctx.lineTo(width-65, height-45);
+        ctx.stroke();
+    }
+	function resizeCanvas(){
+		width = canvas.width = window.innerWidth;
+		height = canvas.height = window.innerHeight;
+        draw();
+	}
+	function zoomIn(){
+		zoomLevel++;
+		spanlat/=2;
+		spanlon/=2;
+	}
+	function zoomOut(){
+		zoomLevel--;
+		spanlat*=2;
+		spanlon*=2; 
+	}
+
+
+	init();
+	</script>
+
+</body>
+</html>
