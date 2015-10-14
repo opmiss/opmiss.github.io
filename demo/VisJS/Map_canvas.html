@@ -10,13 +10,11 @@
     <canvas id="myCanvas"></canvas>
 <script src="geo.js"></script>
 <script src="data.js"></script>
+<script src="interact.js"></script>
 <script>
 	var canvas, gcanvas;
 	var width, height;
 	var ctx, gctx;
-	var isDrag = false, isZoomIn = false, isZoomOut = false;
-	var px, py, mx, my;
-
 	function init(){
 		canvas = document.getElementById('myCanvas');
 		if (canvas.getContext){
@@ -32,39 +30,6 @@
 			//canvas.onselectstart = function(){return false;}
 			resizeCanvas();
 		}
-	}
-	function mouseDown(e){
-		if (isZoomIn) {
-            zoomInView();
-            draw();
-		} else if (isZoomOut){
-			zoomOutView();
-            draw(); 
-		} else { isDrag=true;}
-	}
-	function mouseUp(e){
-		isDrag=false;
-	}
-	function mouseMove(e){
-        px = mx; py = my;
-		getMouse(e);
-        if (isDrag){
-            translateView(px, py, mx, my);
-            draw();
-        }else {
-            drawZoomTool();
-        }
-	}
-	function getMouse(e){
-		var element = canvas, offsetX = 0, offsetY = 0;
-		if (element.offsetParent) {
-			do {
-				offsetX += element.offsetLeft;
-        offsetY += element.offsetTop;
-			} while ((element = element.offsetParent));
-		}
-        mx = e.pageX - offsetX;
-        my = e.pageY - offsetY;
 	}
 	function draw(){
         ctx.clearRect(0, 0, width, height);
@@ -111,18 +76,6 @@
 		height = canvas.height = window.innerHeight;
         draw();
 	}
-	function zoomIn(){
-		zoomLevel++;
-		spanlat/=2;
-		spanlon/=2;
-	}
-	function zoomOut(){
-		zoomLevel--;
-		spanlat*=2;
-		spanlon*=2; 
-	}
-
-
 	init();
 	</script>
 
