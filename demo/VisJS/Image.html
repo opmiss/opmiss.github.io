@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Map v1.0</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<!--<link rel="stylesheet" href="/trystyle.css">-->
+</head>
+<body>
+     <canvas id="canvas"></canvas>
+	 <div id="tag"></div>
+<script>
+var img; 
+var canvas;
+var ctx; 
+var tag;
+var width, height; 
+var imageload = false; 
+
+function init(){
+	img = new Image(); 
+	img.src = 'img/world-map.gif'; 
+	img.crossOrigin = "Anonymous"; 
+	img.onload = function(){
+		ctx.drawImage(img, 0, 0); 
+		img.style.display='none'; 
+	}
+	canvas = document.getElementById('canvas'); 
+	tag = document.getElementById('tag'); 
+	if (canvas.getContext('2d')){
+		ctx = canvas.getContext('2d');
+		window.addEventListener('resize', resizeCanvas, false); 
+		window.addEventListener('orientationchange', resizeCanvas, false);
+		canvas.onselectstart = function(){return false;}
+		canvas.onclick = pick; 
+		resizeCanvas(); 
+	}
+}
+function drawImage(){
+	ctx.clearRect(0, 0, width, height);
+	img.onload() 
+}
+ 
+function drawTool(toolx, tooly){
+	console.log("drawTool", toolx, tooly);
+	ctx.strokeStyle="black"; 
+	ctx.lineWidth="3"; 
+	ctx.rect(toolx, tooly, 50, 150); 
+	ctx.lineWidth="1"; 
+	ctx.rect(toolx+10, tooly+10, 30, 30); 
+	ctx.rect(toolx+10, tooly+50, 30, 30); 
+	ctx.rect(toolx+10, tooly+90, 30, 30); 
+	ctx.stroke(); 
+}
+
+function resizeCanvas(){
+	width = canvas.width = window.innerWidth; 
+	height = canvas.height = window.innerHeight; 
+	drawImage();
+	drawTool(width-60, height-160); 
+}
+function pick(event) {
+    var x = event.layerX;
+    var y = event.layerY;
+    var pixel = ctx.getImageData(x, y, 1, 1);
+    var data = pixel.data;
+    var rgba = 'rgba(' + data[0] + ',' + data[1] +
+    ',' + data[2] + ',' + data[3] + ')';
+    tag.style.background =  rgba;
+    tag.textContent = rgba;
+}
+init(); 
+</script>
+
+</body>
+</html>
