@@ -7,7 +7,7 @@
 }
 
 .iconsmile:before {
-	content: url(../img/iconsmile.png); 
+	content: url('http://opmiss.github.io/demo/VisJS/img/iconsmile.png'); 
 }
 
 
