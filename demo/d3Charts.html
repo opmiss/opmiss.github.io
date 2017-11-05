@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+	
+	svg {
+		font:10px sans-serif;
+		padding:10px;
+	}
+
+.arc text {
+	font: 10px sans-serif;
+	text-anchor: middle;
+}
+
+.arc path {
+	stroke: #fff;
+}
+
+.bar {
+}
+.axis {
+	font: 10px sans-serif;
+}
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+.x.axis path{
+	display: none;
+}
+
+</style>
+<body>
+<!--script src="js/d3.v3.min.js"></script-->
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<div id="option">
+    <input name="updateButton"
+    type="button"
+    value="Update"
+    onclick="update()" />
+</div>
+
+
+<script>
+	var margin = {top:20, right:20, bottom:20, left:20},
+	width = 960/4,
+	height = 500/4,
+	radius = Math.min(width, height) / 2;
+    
+	var color = d3.scale.ordinal()
+	.range(["#5A7AD0", "#32C532", "#ffcc33", "#e63900", "#cc99ff", "#8600b3", "#00ffff"]);
+	
+	var arc = d3.svg.arc()
+	.outerRadius(radius - 10)
+	.innerRadius(0);
+	
+	var pie = d3.layout.pie()
+	.sort(null)
+	.value(function(d) { return d.population; });
+	
+    //plot gender distribution
+    var data_gender = [[{gender:'Male', population:0.43}, {gender: 'Female', population:0.57}], [{gender:'Male', population:0.73}, {gender: 'Female', population:0.27}]];
+    var option = 0; // choice of input data
+    
+    var svg_gender = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height+margin.top+margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    
+    var g = svg_gender.selectAll(".arc").data(pie(data_gender[option])).enter().append("g").attr("class", "arc");
+    var path = g.append("path").attr("d", arc).attr("fill", function(d, i){return color(i);}).each(function(d){this._current=d;});
+    var text = g.append("text").each(function(d){this._current = arc.centroid(d)}).attr("transform", function(d) { return "translate(" + this._current + ")";}).attr("dy", ".35em").text(function(d) { return d.data.gender; });
+    
+    function update(){
+        option = (option+1)%2;
+        //update gender distribution
+        var piedata = pie(data_gender[option]);
+        path = path.data(piedata);
+        path.transition().attrTween("d", arcTween);
+        text = text.data(piedata);
+        text.transition().ease("quad-out").attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; }).attr("dy", ".35em").text(function(d) { return d.data.gender;});
+        //update age distribution
+        svg_age.selectAll(".bar").data(data_age[option]).transition().attr("y", function(d){return y_age(d.population);}).attr("height", function(d){return height-y_age(d.population);});
+        //update bmi distributions
+        inputlayers_bmi = (Object.keys(data_bmi[option][0]).filter(function(e){return e!=='bmi'})).map(function(c){return data_bmi[option].map(function(d){ return {x: d.bmi, y: d[c]};});})
+        layers_bmi = d3.layout.stack()(inputlayers_bmi);
+        layer_bmi = svg_bmi.selectAll(".layer").data(layers_bmi);
+        layer_bmi.selectAll("rect").data(function(d){return d;}).transition().attr("y", function(d){return y_bmi(d.y+d.y0);}).attr("height", function(d){return y_bmi(d.y0)-y_bmi(d.y+d.y0);});
+        //update smoking history
+        var piedata_ring = pie(data_ring[option]);
+        path_ring = path_ring.data(piedata_ring);
+        path_ring.transition().attrTween("d", ringTween);
+        text_ring = text_ring.data(piedata_ring);
+        text_ring.transition().ease("quad-out").attr("transform", function(d) { return "translate(" + ring.centroid(d) + ")"; }).attr("dy", ".35em").text(function(d) { return d.data.smoking;});
+        //update matrix chart
+        inputlayers_matrix = rowhead.map(function(rh, i){return colhead.map(function(ch){
+                minVal = Math.min(minVal, data_matrix[option][i][ch]);
+                maxVal = Math.max(maxVal, data_matrix[option][i][ch]);
+                return {x:ch, y:1, y0:0, c:data_matrix[option][i][ch]}})});
+        colorScale = d3.scale.linear().range(['lightblue', 'darkblue']).domain([minVal, maxVal]);
+        layers_matrix = d3.layout.stack()(inputlayers_matrix);
+        layer_matrix = svg_matrix.selectAll(".layer").data(layers_matrix);
+        layer_matrix.selectAll("rect").data(function(d){return d;}).transition().attr("fill", function(d){return colorScale(d.c);});
+    }
+    function arcTween(a){
+        var i = d3.interpolate(this._current, a);
+        this._current = i(0);
+        return function(t){
+            return arc(i(t));
+        };
+    }
+    function ringTween(a){
+        var i = d3.interpolate(this._current, a);
+        this._current = i(0);
+        return function(t){
+            return ring(i(t));
+        };
+    }
+
+    //plot age distribution
+	var x_age = d3.scale.ordinal().rangeRoundBands([0, width], .25);
+	var y_age = d3.scale.linear().range([height, 0]);
+	var xAxis_age = d3.svg.axis().scale(x_age).orient("bottom");
+	var yAxis_age = d3.svg.axis().scale(y_age).orient("left").ticks(10, "%");
+ 
+	var svg_age = d3.select("body").append("svg")
+				 .attr("width", width+margin.left+margin.right)
+				 .attr("height", height+margin.top+margin.bottom)
+				 .append("g")
+				 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    var data_age = [[{"age":"<18","population":0.1},{"age":"18-44","population":0.15},{"age":"45-64","population":0.25},{"age":"64-84","population":0.2},{"age":"85+","population":0.3}], [{"age":"<18","population":0.12},{"age":"18-44","population":0.16},{"age":"45-64","population":0.20},{"age":"64-84","population":0.23},{"age":"85+","population":0.29}]];
+    x_age.domain(data_age[option].map(function(d){return d.age}));
+    y_age.domain([0, d3.max(data_age[option], function(d){return d.population})]);
+    svg_age.append("g").attr("class", "x axis").attr("transform", "translate(0,"+height+")").call(xAxis_age);
+    svg_age.append("g").attr("class", "y axis").call(yAxis_age).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".51em")
+				 .style("text-anchor", "end").text("Population [%]");
+				 
+    svg_age.selectAll(".bar").data(data_age[option]).enter().append("rect").attr("class", "bar").attr("x", function(d){ return x_age(d.age);})
+				 .attr("width", x_age.rangeBand()).attr("y", function(d){return y_age(d.population);}).attr("height", function(d){return height-y_age(d.population);}).attr("fill", function(d, i) { return color(i);});
+				 
+    //plot bmi
+    var x_bmi = d3.scale.ordinal().rangeRoundBands([0, width], .25);
+    var y_bmi = d3.scale.linear().range([height, 0]);
+    var xAxis_bmi = d3.svg.axis().scale(x_bmi).orient("bottom");
+    var yAxis_bmi = d3.svg.axis().scale(y_bmi).orient("left").ticks(10, "%");
+    var svg_bmi = d3.select("body").append("svg").attr("width", width+margin.left+margin.right).attr("height", height+margin.top+margin.bottom).append("g").attr("transform", "translate("+margin.left+","+margin.top+")");
+    var data_bmi =
+    [[{"bmi":"<18","Underweight":0.15,"Normal":0.45,"Overweight":0.15,"Obese":0.2,"Morbidly Obese":0.05,"Not Assessed":0},{"bmi":"18-44","Underweight":0,"Normal":0.3,"Overweight":0.1,"Obese":0.3,"Morbidly Obese":0,"Not Assessed":0.3},{"bmi":"45-64","Underweight":0.05,"Normal":0.3,"Overweight":0.15,"Obese":0.3,"Morbidly Obese":0.1,"Not Assessed":0.1},{"bmi":"65-84","Underweight":0.05,"Normal":0.2,"Overweight":0.2,"Obese":0.5,"Morbidly Obese":0.05,"Not Assessed":0},{"bmi":"85+","Underweight":0.05,"Normal":0.3,"Overweight":0.2,"Obese":0.1,"Morbidly Obese":0.3,"Not Assessed":0.05}],
+     [{"bmi":"<18","Underweight":0.20,"Normal":0.30,"Overweight":0.25,"Obese":0.25,"Morbidly Obese":0.0,"Not Assessed":0},{"bmi":"18-44","Underweight":0.1,"Normal":0.2,"Overweight":0.2,"Obese":0.2,"Morbidly Obese":0.1,"Not Assessed":0.2},{"bmi":"45-64","Underweight":0.1,"Normal":0.15,"Overweight":0.25,"Obese":0.2,"Morbidly Obese":0.2,"Not Assessed":0.1},{"bmi":"65-84","Underweight":0.1,"Normal":0.15,"Overweight":0.3,"Obese":0.4,"Morbidly Obese":0.05,"Not Assessed":0},{"bmi":"85+","Underweight":0.05,"Normal":0.3,"Overweight":0.3,"Obese":0.2,"Morbidly Obese":0.1,"Not Assessed":0.05}]];
+    var inputlayers_bmi = (Object.keys(data_bmi[option][0]).filter(function(e){return e!=='bmi'}))
+               .map(function(c){return data_bmi[option].map(function(d){ return {x: d.bmi, y: d[c]};});})
+    var layers_bmi = d3.layout.stack()(inputlayers_bmi);
+    x_bmi.domain(layers_bmi[0].map(function(d){return d.x; }));
+    y_bmi.domain([0, d3.max(layers_bmi[layers_bmi.length-1], function(d){return d.y0+d.y;})]);
+    var layer_bmi = svg_bmi.selectAll(".layer").data(layers_bmi).enter().append("g").attr("class", "layer")
+               .style("fill", function(d, i){return color(i);});
+    layer_bmi.selectAll("rect").data(function(d){return d;}).enter().append("rect").attr("x", function(d){return x_bmi(d.x);})
+               .attr("y", function(d){return y_bmi(d.y+d.y0);}).attr("height", function(d){return y_bmi(d.y0)-y_bmi(d.y+d.y0);})
+               .attr("width", x_bmi.rangeBand()-1);
+    svg_bmi.append("g").attr("class", "x axis").attr("transform", "translate(0,"+height+")").call(xAxis_bmi);
+    svg_bmi.append("g").attr("class", "y axis").call(d3.svg.axis().scale(y_bmi).orient("left").ticks(5, "%")).append("text")
+               .attr("transform", "rotate(-90)")
+               .attr("y", 6).attr("dy", ".51em")
+               .style("text-anchor", "end").text("Percentage [%]");
+               
+    //plot ring chart of smoking history
+    var ring = d3.svg.arc().outerRadius(radius + 10).innerRadius(radius - 20);
+    var svg_ring = d3.select("body").append("svg").attr("width", width)
+        .attr("height", height+margin.top+margin.bottom).append("g")
+        .attr("transform", "translate(" + (width/2) + "," + (margin.top+height/2) + ")");
+    var data_ring =
+    [[{"smoking":"Yes","population":0.35},{"smoking":"No","population":0.50},{"smoking":"N/A","population":0.15}],
+     [{"smoking":"Yes","population":0.60},{"smoking":"No","population":0.30},{"smoking":"N/A","population":0.10}]];
+    var g_ring = svg_ring.selectAll(".arc").data(pie(data_ring[option])).enter().append("g").attr("class", "arc");
+    var path_ring = g_ring.append("path").attr("d", ring).style("fill", function(d, i) { return color(i); }).each(function(d){this._current=d;});
+    var text_ring = g_ring.append("text").attr("transform", function(d) { return "translate(" + ring.centroid(d) + ")"; }).attr("dy", ".35em")
+               .text(function(d) { return d.data.smoking; });
+               
+        //plot matrix plot
+    var x_matrix = d3.scale.ordinal().rangeRoundBands([0, width], 0);
+    var xAxis_matrix = d3.svg.axis().scale(x_matrix).orient("bottom");
+    var y_matrix = d3.scale.linear().range([height, 0]);
+        
+    var svg_matrix = d3.select("body").append("svg").attr("width", width+margin.left+margin.right)
+        .attr("height", height+margin.top+margin.bottom).append("g").attr("transform", "translate("+margin.left+","+margin.top+")");
+    var data_matrix = [[{"value":"Insulin"," Insulin":" 0.31"," GLP-1":" 0.32"," Amylin":" 0.33"," Sulf.":" 0.32"," Glin.":" 0.45"," Bigu.":" 0.65"," Thia.":" 0.21"," Sulfo.":" 0.35"," A-Chy.":" 0.42"},{"value":"GLP-1"," Insulin":" 0.12"," GLP-1":" 0.11"," Amylin":" 0.12"," Sulf.":" 0.12"," Glin.":" 0.22"," Bigu.":" 0.25"," Thia.":" 0.05"," Sulfo.":" 0.21"," A-Chy.":" 0.22"},{"value":"Amylin"," Insulin":" 0.23"," GLP-1":" 0.18"," Amylin":" 0.17"," Sulf.":" 0.15"," Glin.":" 0.23"," Bigu.":" 0.22"," Thia.":" 0.04"," Sulfo.":" 0.22"," A-Chy.":" 0.25"},{"value":"Sulf."," Insulin":" 0.13"," GLP-1":" 0.15"," Amylin":" 0.12"," Sulf.":" 0.14"," Glin.":" 0.32"," Bigu.":" 0.33"," Thia.":" 0.12"," Sulfo.":" 0.20"," A-Chy.":" 0.22"},{"value":"Glin."," Insulin":" 0.22"," GLP-1":" 0.36"," Amylin":" 0.25"," Sulf.":" 0.30"," Glin.":" 0.72"," Bigu.":" 0.78"," Thia.":" 0.25"," Sulfo.":" 0.33"," A-Chy.":" 0.70"}],
+    [{"value":"Insulin"," Insulin":" 0.31"," GLP-1":" 0.32"," Amylin":" 0.63"," Sulf.":" 0.32"," Glin.":" 0.45"," Bigu.":" 0.65"," Thia.":" 0.21"," Sulfo.":" 0.15"," A-Chy.":" 0.42"},{"value":"GLP-1"," Insulin":" 0.12"," GLP-1":" 0.11"," Amylin":" 0.32"," Sulf.":" 0.32"," Glin.":" 0.22"," Bigu.":" 0.25"," Thia.":" 0.55"," Sulfo.":" 0.21"," A-Chy.":" 0.22"},{"value":"Amylin"," Insulin":" 0.23"," GLP-1":" 0.58"," Amylin":" 0.27"," Sulf.":" 0.15"," Glin.":" 0.23"," Bigu.":" 0.22"," Thia.":" 0.24"," Sulfo.":" 0.32"," A-Chy.":" 0.25"},{"value":"Sulf."," Insulin":" 0.43"," GLP-1":" 0.65"," Amylin":" 0.12"," Sulf.":" 0.14"," Glin.":" 0.32"," Bigu.":" 0.23"," Thia.":" 0.72"," Sulfo.":" 0.20"," A-Chy.":" 0.22"},{"value":"Glin."," Insulin":" 0.62"," GLP-1":" 0.16"," Amylin":" 0.25"," Sulf.":" 0.30"," Glin.":" 0.72"," Bigu.":" 0.18"," Thia.":" 0.25"," Sulfo.":" 0.23"," A-Chy.":" 0.10"}]]
+    var colhead = Object.keys(data_matrix[option][0]).filter(function(e){return e!=='value'});
+    var rowhead = data_matrix[option].map(function(obj){return obj.value;});
+    var minVal=Number.MAX_VALUE, maxVal=Number.MIN_VALUE;
+    var inputlayers_matrix = rowhead.map(function(rh, i){return colhead.map(function(ch){
+                    minVal = Math.min(minVal, data_matrix[option][i][ch]);
+                    maxVal = Math.max(maxVal, data_matrix[option][i][ch]);
+                    return {x:ch, y:1, y0:0, c:data_matrix[option][i][ch]}})});
+    var colorScale = d3.scale.linear().range(['lightblue', 'darkblue']).domain([minVal, maxVal]);
+    var layers_matrix = d3.layout.stack()(inputlayers_matrix);
+    x_matrix.domain(colhead);
+    y_matrix.domain([0, d3.max(layers_matrix[layers_matrix.length-1], function(d){return d.y0+d.y;})]).nice();
+    var layer_matrix = svg_matrix.selectAll(".layer").data(layers_matrix).enter().append("g").attr("class", "layer");
+    layer_matrix.selectAll("rect").data(function(d){return d;}).enter().append("rect")
+                .attr("x", function(d){return x_matrix(d.x);})
+                .attr("y", function(d){return y_matrix(d.y+d.y0);})
+                .attr("height", function(d){return y_matrix(d.y0)-y_matrix(d.y+d.y0);})
+                .attr("width", x_matrix.rangeBand()-1)
+               .attr("fill", function(d){
+                     return colorScale(d.c);
+                });
+    svg_matrix.append("g").attr("class", "x axis").attr("transform", "translate(0,"+height+")").call(xAxis_matrix);
+    svg_matrix.append("g").attr("class", "y axis").append("text")
+               .attr("transform", "rotate(-90)")
+               .attr("y", -6)
+               .attr("dy", "0em")
+               .style("text-anchor", "end")
+               .text(rowhead.join(' '));
+function type(d) {
+	d.population = +d.population;
+	return d;
+}
+function type3(d) {
+    d.value = +d.value;
+    return d;
+}
+function type2(d){
+    ["Underweight", "Normal", "Overweight", "Obese", "Morbidly Obese", "Not Assessed"].forEach(function(c){d[c]=+d[c];});
+    return d;
+}
+
+</script>
