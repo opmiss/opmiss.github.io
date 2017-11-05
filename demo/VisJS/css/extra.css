@@ -16,7 +16,7 @@
 	height: 70px; 
 	width: 70px; 
 	display: block; 
-	background: url('../img/meep-large.png') 0 0; 
+	background: url('http://opmiss.github.io/demo/VisJS/img/meep-large.png') 0 0; 
 }
 
 #meep10-large { 
@@ -24,7 +24,7 @@
 	height: 70px; 
 	width: 70px; 
 	display: block; 
-	background: url('../img/meep-large.png') -70px 0; 
+	background: url('http://opmiss.github.io/demo/VisJS/img/meep-large.png') -70px 0; 
 }
 
 #meep20-large { 
@@ -32,7 +32,7 @@
 	height: 70px; 
 	width: 70px; 
 	display: block; 
-	background: url('../img/meep-large.png') -140px 0; 
+	background: url('http://opmiss.github.io/demo/VisJS/img/meep-large.png') -140px 0; 
 }
 
 #meep30-large { 
@@ -40,7 +40,7 @@
 	height: 70px; 
 	width: 70px; 
 	display: block; 
-	background: url('../img/meep-large.png') -210px 0; 
+	background: url('http://opmiss.github.io/demo/VisJS/img/meep-large.png') -210px 0; 
 }
 
 #meep01-large { 
@@ -48,7 +48,7 @@
 	height: 70px; 
 	width: 70px; 
 	display: block; 
-	background: url('../img/meep-large.png') 0 -70px; 
+	background: url('http://opmiss.github.io/demo/VisJS/img/meep-large.png') 0 -70px; 
 }
 
 #meep02-large { 
@@ -56,7 +56,7 @@
 	height: 70px; 
 	width: 70px; 
 	display: block; 
-	background: url('../img/meep-large.png') 0 -140px; 
+	background: url('http://opmiss.github.io/demo/VisJS/img/meep-large.png') 0 -140px; 
 }
 
 
@@ -66,6 +66,6 @@
 	height: 50px; 
 	width: 50px; 
 	display: block; 
-	background: url('../img/meep-small.png') 0 -210px; 
+	background: url('http://opmiss.github.io/demo/VisJS/img/meep-small.png') 0 -210px; 
 }
 
